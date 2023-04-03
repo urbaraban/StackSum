@@ -51,7 +51,10 @@ namespace ClipSum
             float sum = 0;
             foreach (ComboData comboData in listView.Items)
                 sum += (float)comboData.Value * comboData.Multiplier;
+
             SumLabel.Text = sum.ToString();
+            ttip.ToolTipText = sum.ToString();
+            if (this.WindowState == WindowState.Minimized) ttip.ShowBalloonTip("Сумма", sum.ToString(), Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
         }
 
         [Serializable]
@@ -102,16 +105,22 @@ namespace ClipSum
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             HotKeyHost hotKeyHost = new HotKeyHost((HwndSource)HwndSource.FromVisual(App.Current.MainWindow));
-            hotKeyHost.AddHotKey(new CustomHotKey("SumClipboard", Key.F5, ModifierKeys.Control, true));
-            hotKeyHost.AddHotKey(new CustomHotKey("AddClipboard", Key.F6, ModifierKeys.Control, true));
+            foreach (HotKey hotKey in hotKeyHost.HotKeys)
+                hotKeyHost.RemoveHotKey(hotKey);
+            try
+            {
+                hotKeyHost.AddHotKey(new CustomHotKey("SumClipboard", Key.NumPad0, ModifierKeys.Control, true));
+                hotKeyHost.AddHotKey(new CustomHotKey("AddClipboard", Key.NumPad1, ModifierKeys.Control, true));
+            }
+            catch { }
             hotKeyHost.HotKeyPressed += pressevent;
         }
 
         private void pressevent(object sender, HotKeyEventArgs e)
         {
-            if (e.HotKey.Key == Key.F5)
+            if (e.HotKey.Key == Key.NumPad0)
                 CalcClipboard(false);
-            else if(e.HotKey.Key == Key.F6)
+            else if(e.HotKey.Key == Key.NumPad1)
                 CalcClipboard(true);
         }
 
@@ -215,6 +224,39 @@ namespace ClipSum
                 index--;
                 Calc(true);
             }
+        }
+
+        private void ttip_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(SumLabel.Text);
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == WindowState.Minimized) this.ShowInTaskbar = false;
+            else if (this.WindowState == WindowState.Minimized) this.ShowInTaskbar = true;
+        }
+
+        private void ShowBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Normal;
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Normal;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            HotKeyHost hotKeyHost = new HotKeyHost((HwndSource)HwndSource.FromVisual(App.Current.MainWindow));
+            foreach (HotKey hotKey in hotKeyHost.HotKeys)
+                hotKeyHost.RemoveHotKey(hotKey);
         }
     }
 }
