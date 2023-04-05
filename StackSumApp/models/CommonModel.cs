@@ -25,7 +25,18 @@ namespace StackSumApp.models
                 OnPropertyChanged(nameof(SelectStack));
             }
         }
-        private StackSum _selectStack = new StackSum();
+        private StackSum? _selectStack;
+
+        public CommonModel()
+        {
+            base.Add(new StackSum());
+        }
+
+        protected override void InsertItem(int index, StackSum item)
+        {
+            base.InsertItem(index, item);
+            SelectStack = item;
+        }
 
         public void KeyPressVoid(Key key)
         {
@@ -42,13 +53,23 @@ namespace StackSumApp.models
         }
 
         public ICommand ParseAlreadyStackCommand => new ActionCommand(() => {
+            if (SelectStack == null)
+            {
+                if (this.Count == 0)
+                {
+                    AddStackCommand.Execute(this);
+                } 
+                else
+                {
+                    SelectStack = this[0];
+                }
+            }
+
             string temp = Clipboard.GetText();
             string[] lines = temp.Split(new[] { "\r\n", "\r", "\n", "\t" }, StringSplitOptions.None);
 
             foreach (string element in lines)
             {
-                // if (!CheckWord(element))
-                //{
                 string element1 = Regex.Replace(element, "[^0-9,.]", string.Empty);
                 if (element1 != string.Empty)
                 {
@@ -59,8 +80,6 @@ namespace StackSumApp.models
                         this.SelectStack.Add(new StackItem($"Item {this.SelectStack.Count}", result));
                     }
                 }
-                //}
-                //else comboData.Nik = element;
             }
             OnPropertyChanged();
         });

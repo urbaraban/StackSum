@@ -28,18 +28,27 @@
     <Grid>
         <DockPanel Margin="3">
             <DockPanel DockPanel.Dock="Top">
-                <Button DockPanel.Dock="Left"
+                <DockPanel DockPanel.Dock="Top" LastChildFill="False">
+                    <Button DockPanel.Dock="Left"
                         Content="🡄"
                         Command="{Binding PrevStackCommand}"
                         Style="{StaticResource RectBtn}"/>
-                <Button DockPanel.Dock="Left"
+                    <Button DockPanel.Dock="Left"
                         Content="🡆"
                         Command="{Binding NextStackCommand}"
                         Style="{StaticResource RectBtn}" />
-                <Button DockPanel.Dock="Right"
+                    <Button DockPanel.Dock="Right"
                         Content="×"
                         Command="{Binding RemoveStackCommand}"
                         Style="{StaticResource RectBtn}" />
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Bottom">
+                    <ComboBox ItemsSource="{Binding .}"
+                              DisplayMemberPath="CommonSum"
+                              SelectedItem="{Binding SelectStack}"
+                              DockPanel.Dock="Bottom" />
+                </DockPanel>
+
                 <TextBlock HorizontalAlignment="Center">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0}/{1}">
