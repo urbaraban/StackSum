@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StackSumApp.models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,14 @@ namespace StackSumApp
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (this.DataContext is CommonModel model)
+            {
+                model.KeyPressVoid(e.Key);
+            }
         }
     }
 }

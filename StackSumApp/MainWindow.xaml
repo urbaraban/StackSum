@@ -3,10 +3,120 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:StackSumApp"
+        xmlns:models="clr-namespace:StackSumApp.models"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        d:DataContext="{d:DesignInstance Type=models:CommonModel}"
+        WindowStyle="ToolWindow"
+        Title="StackSum"
+        Topmost="True" 
+        Focusable="True"
+        Height="400" Width="200" Icon="/the-sum-of.png"
+        KeyDown="Window_KeyDown">
+    <Window.DataContext>
+        <models:CommonModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button">
+                <Setter Property="Margin" Value="3" />
+            </Style>
+            <Style TargetType="Button" x:Key="RectBtn">
+                <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
-
+        <DockPanel Margin="3">
+            <DockPanel DockPanel.Dock="Top">
+                <Button DockPanel.Dock="Left"
+                        Content="🡄"
+                        Command="{Binding PrevStackCommand}"
+                        Style="{StaticResource RectBtn}"/>
+                <Button DockPanel.Dock="Left"
+                        Content="🡆"
+                        Command="{Binding NextStackCommand}"
+                        Style="{StaticResource RectBtn}" />
+                <Button DockPanel.Dock="Right"
+                        Content="×"
+                        Command="{Binding RemoveStackCommand}"
+                        Style="{StaticResource RectBtn}" />
+                <TextBlock HorizontalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0}/{1}">
+                            <Binding Path="SelectIndex" />
+                            <Binding Path="Count" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Bottom">
+                <DockPanel DockPanel.Dock="Top">
+                    <Button Content="New"
+                            Command="{Binding AddStackCommand}"/>
+                    <Button Content="Add"
+                            Command="{Binding ParseAlreadyStackCommand}"/>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Bottom">
+                    <Label Content="Sum:" />
+                    <TextBox Text="{Binding SelectStack.CommonSum, Mode=OneWay}"
+                             d:Text="0000000"
+                             TextWrapping="Wrap"
+                             BorderThickness="0,0,0,1"
+                             VerticalContentAlignment="Center"
+                             HorizontalContentAlignment="Right"/>
+                </DockPanel>
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Top">
+                <ListView ItemsSource="{Binding SelectStack}">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" 
+                                            Width="Auto"
+                                            DisplayMemberBinding="{Binding Path=Display}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox MinWidth="70" 
+                                                 Text="{Binding Display, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Background="{x:Null}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Value">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Mult" 
+                                            Width="Auto"
+                                            DisplayMemberBinding="{Binding Multiplier}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Margin="0" BorderThickness="0"  
+                                                 Text="{Binding Multiplier, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Background="{x:Null}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="dell" Header="dell"  Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="X"
+                                                Style="{StaticResource RectBtn}"
+                                                Command="{Binding RemoveCommand}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </DockPanel>
+        </DockPanel>
     </Grid>
 </Window>
