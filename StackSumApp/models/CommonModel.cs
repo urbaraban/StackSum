@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
+using System.Diagnostics;
 
 namespace StackSumApp.models
 {
@@ -52,13 +53,16 @@ namespace StackSumApp.models
             }
         }
 
-        public ICommand ParseAlreadyStackCommand => new ActionCommand(() => {
+        public ICommand ParseAlreadyStackCommand => new ActionCommand(() => { GetClipboard(); });
+
+        public void GetClipboard()
+        {
             if (SelectStack == null)
             {
                 if (this.Count == 0)
                 {
                     AddStackCommand.Execute(this);
-                } 
+                }
                 else
                 {
                     SelectStack = this[0];
@@ -82,7 +86,7 @@ namespace StackSumApp.models
                 }
             }
             OnPropertyChanged();
-        });
+        }
 
 
         public ICommand NextStackCommand => new ActionCommand(() => {

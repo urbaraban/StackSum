@@ -30,11 +30,11 @@
             <DockPanel DockPanel.Dock="Top">
                 <DockPanel DockPanel.Dock="Top" LastChildFill="False">
                     <Button DockPanel.Dock="Left"
-                        Content="🡄"
+                        Content="&lt;"
                         Command="{Binding PrevStackCommand}"
                         Style="{StaticResource RectBtn}"/>
                     <Button DockPanel.Dock="Left"
-                        Content="🡆"
+                        Content=">"
                         Command="{Binding NextStackCommand}"
                         Style="{StaticResource RectBtn}" />
                     <Button DockPanel.Dock="Right"
@@ -67,7 +67,7 @@
                 </DockPanel>
                 <DockPanel DockPanel.Dock="Bottom">
                     <Label Content="Sum:" />
-                    <TextBox Text="{Binding SelectStack.CommonSum, Mode=OneWay}"
+                    <TextBox Text="{Binding SelectStack.CommonSum, Mode=OneWay, StringFormat={}{0:### ### ### ###.##}}"
                              d:Text="0000000"
                              TextWrapping="Wrap"
                              BorderThickness="0,0,0,1"

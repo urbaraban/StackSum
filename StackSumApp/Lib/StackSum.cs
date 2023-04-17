@@ -96,6 +96,8 @@ namespace StackSumApp.Lib
         public ICommand RemoveCommand => new ActionCommand(() => {
             Remove?.Invoke(this, EventArgs.Empty);
         });
+        
+        public string ToString() => $"{Display} {Value}";
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
