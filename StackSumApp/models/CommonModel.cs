@@ -117,7 +117,12 @@ namespace StackSumApp.models
         });
 
         public ICommand RemoveStackCommand => new ActionCommand(() => {
+            int index = this.SelectIndex;
             this.Remove(this.SelectStack);
+            if (index > 1)
+            {
+                this.SelectStack = this[index - 2];
+            }
             OnPropertyChanged(nameof(Count));
         });
 

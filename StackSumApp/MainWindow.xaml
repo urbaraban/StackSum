@@ -76,6 +76,13 @@
                 </DockPanel>
             </DockPanel>
             <DockPanel DockPanel.Dock="Top">
+                <DockPanel.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Paste" Command="{Binding ParseAlreadyStackCommand}" />
+                        <MenuItem Header="New" Command="{Binding AddStackCommand}" />
+                        <MenuItem Header="Remove" Command="{Binding RemoveStackCommand}" /> 
+                    </ContextMenu>
+                </DockPanel.ContextMenu>
                 <ListView ItemsSource="{Binding SelectStack}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
